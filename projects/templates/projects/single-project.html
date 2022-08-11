@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+{% load random_image %}
+{% load clean_text %}
+{% load mathfilters %}
+{% load humanize %}
+
+{% block content %}
+<h1 class="mt-5">{{ project.highlights }}</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="pt-3 pb-3">
+                <div class="w-100 pb-3">
+                    {% if project.featured_image %}
+                    <img class="img-fluid rounded" src="{{ project.featured_image.url }}" alt="{{ project.highlights }}">
+                    {% else %}
+                    <img class="img-fluid rounded" src="{{MEDIA_URL}}{% random_image 'random-images' %}" alt="{{ project.highlights }}">
+                    {% endif %}
+                </div>
+
+                {% if project.owner %}
+                <p><small class="text-muted">Agent: {{ project.owner }}</small></p>
+                {% endif %}
+
+                {% for tag in project.tags %}
+                <p class="badge bg-secondary">{{ tag }}</p>
+                {% endfor %}
+
+                <p><span class="text-uppercase fw-bold">BEDS, BATHS:</span> {% if project.beds %}{{ project.beds|floatformat }} bed{{ project.beds|pluralize:'s'}},{% endif %} {% if project.beds %}{{ project.baths }} bath{{ project.baths|pluralize:'s'}}{% endif %}</p>
+                {% if project.price %}
+                <p><span class="text-uppercase fw-bold">PRICE:</span> AED {{ project.price|intcomma }} {% if project.surface %}/ {{ project.price|div:project.surface|floatformat:1 }}{% endif %} per sqf {% if val_price %}[<span class="text-primary {% if val_price == 'good value' or val_price == 'great value' %} text-success {% elif val_price == 'overvalued' or val_price == 'highly overvalued' %} text-danger {% endif %}"><span class="text-uppercase fw-bold">{{ val_price }}</span></span>]{% endif %}</p>
+                {% endif %}
+                {% if project.surface %}
+                <p><span class="text-uppercase fw-bold">SURFACE:</span> {{ project.surface|floatformat:1 }} sqf</p>
+                {% endif %}
+                <p><span class="text-uppercase fw-bold">ADDRESS:</span> {% if project.building != 'NaN' %} {{ project.building }} | {% endif %} {% if project.district != 'NaN' %} {{ project.district }} | {% endif %} {% if project.neighborhood != 'NaN' %} {{ project.neighborhood }} {% endif %}</p>
+                {% if project.amenities %}
+                <p><span class="text-uppercase fw-bold">DESCRIPTION:</span> {{ project.amenities|clean_text }}</p>
+                {% endif %}
+                <p><a href="{{ project.url }}" target="_blank">Go to project's website page</a></p>
+
+                <div class="pt-5">
+                    <a class="btn btn-primary" href="{% url 'update-project' project.id %}">Edit</a>
+                    <a class="btn btn-danger" href="{% url 'delete-project' project.id %}">Delete</a>
+                </div>
+            </div>
+        </div>
+
+        {% include 'listing-infographics.html' %}
+    </div>
+</div>
+{% endblock content %}

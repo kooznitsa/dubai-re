@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+{% include 'infographics.html' %}
+
+<h1 class="mt-5">Dubai Investment Projects</h1>
+
+<div class="pt-3 pb-3">
+{% for project in projects %}
+{% include 'project-card.html' %}
+{% endfor %}
+</div>
+
+{% include 'pagination.html' with queryset=projects custom_range=custom_range %}
+
+{% endblock content %}

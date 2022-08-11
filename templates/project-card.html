@@ -1,0 +1,32 @@
+{% load random_image %}
+{% load clean_text %}
+{% load mathfilters %}
+{% load humanize %}
+
+<div class="card mb-5">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            {% if project.featured_image %}
+            <img class="card-img" src="{{ project.featured_image.url }}" alt="{{ project.highlights }}">
+            {% else %}
+            <img class="card-img" src="{{MEDIA_URL}}{% random_image 'random-images' %}" alt="{{ project.highlights }}">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title"><a class="link-dark" href="{% url 'project' project.id %}">{{ project.highlights }}</a></h5>
+                <p class="card-text"><span class="text-muted">{% if project.building != 'NaN' %} {{ project.building }} | {% endif %} {% if project.district != 'NaN' %} {{ project.district }} | {% endif %} {% if project.neighborhood != 'NaN' %} {{ project.neighborhood }} {% endif %}</sp></p>
+                
+                {% if project.price %}
+                <p class="card-text"><strong>AED {{ project.price|intcomma }} {% if project.surface %} / {{ project.price|div:project.surface|floatformat:1 }} per sqf{% endif %}</strong></p>
+                {% endif %}
+                
+                {% if project.amenities %}
+                <p class="card-text"><small>{{ project.amenities|clean_text|slice:"175" }}...</small></p>
+                {% endif %}
+
+                <a href="{% url 'project' project.id %}" class="btn btn-primary">View</a>
+            </div>
+        </div>
+    </div>
+</div>

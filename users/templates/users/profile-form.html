@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% load static %}
+
+{% block content %}
+
+<h1 class="mt-5">Edit Profile</h1>
+
+<form class="w-50 pt-3 pb-3 mb-5" method="POST" action="{% url 'edit-account' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">SUBMIT</button>
+        <a href="{% url 'account' %}" class="btn btn-secondary">CANCEL</a>
+    {% endbuttons %}
+</form>
+
+{% endblock content %}

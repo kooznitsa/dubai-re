@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% load bootstrap_icons %}
+{% load static %}
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+        <title>Dubai Investment Projects</title>
+    </head>
+
+    <body class="d-flex flex-column min-vh-100">
+        {% include 'navbar.html' %}
+
+        <div class="container-fluid mx-auto w-75 p-3 mb-5">
+            {% include 'messages.html' %}
+            {% block content %}
+            {% endblock content %}
+        </div>
+        
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    </body>
+
+    <footer class="footer bg-dark text-light text-center p-3 mt-auto">
+        <div class="container-fluid p-4 pb-0">
+            <section class="mb-4">
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle" href="#!" target="_blank" role="button">
+                    {% bs_icon 'linkedin' %}
+                </a>
+
+                <a class="btn btn-outline-light btn-floating m-1 rounded-circle" href="https://github.com/kooznitsa" target="_blank" role="button">
+                    {% bs_icon 'github' %}
+                </a>
+            </section>
+        </div>
+
+        <div class="p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2022 Copyright
+        </div>
+    </footer>
+</html>

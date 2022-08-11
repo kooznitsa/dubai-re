@@ -1,0 +1,24 @@
+{% load humanize %}
+
+<div class="col-lg-4 pt-3">
+    <div class="card text-light bg-secondary mb-3" style="max-width: 18rem;">
+    <div class="card-header fw-bold">Price difference with similar flats</div>
+    <div class="card-body">
+        <p class="card-text fs-2 fw-bold">{% if project.price and project.surface %}{{price_diff|floatformat:0}}%{% else %}No data{% endif %}</p>
+    </div>
+    </div>
+
+    <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
+    <div class="card-header fw-bold">Average price in this district</div>
+    <div class="card-body">
+        <p class="card-text fs-2 fw-bold">AED {{avg_price_sqf|floatformat:0|intcomma}} sqf</p>
+    </div>
+    </div>
+
+    <div class="card text-white bg-dark mb-3" style="max-width: 18rem;">
+    <div class="card-header fw-bold">Average price in this district</div>
+    <div class="card-body">
+        <p class="card-text fs-2 fw-bold">AED {{avg_price|floatformat:0|intcomma}}</p>
+    </div>
+    </div>
+</div>

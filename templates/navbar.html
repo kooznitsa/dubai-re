@@ -1,0 +1,78 @@
+{% load bootstrap_icons %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+    <div class="container-fluid">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item pt-2 px-3">
+                <a class="navbar-brand" href="{% url 'projects' %}">
+                    {% bs_icon 'house-fill' %}
+                </a>
+            </li>
+            <li class="nav-item pt-2 px-3">
+                <a class="nav-link text-light" href="{% url 'projects' %}">Projects</a>
+            </li>
+
+            {% if request.user.is_authenticated %}
+            <li class="nav-item pt-2 px-3">
+                <a class="nav-link text-light" href="{% url 'account' %}">Account</a>
+            </li>
+            <li class="nav-link text-light"><a href="{% url 'logout' %}" class="btn btn-secondary">Log Out</a></li>
+            {% else %}
+            <li class="nav-link text-light"><a href="{% url 'login' %}" class="btn btn-secondary">Log In / Sign Up</a></li>
+            {% endif %}
+        /ul>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+    <div class="container-fluid">
+        <p class="h1 text-white-50 text-center mx-auto">SEARCH FOR <span class="fw-bold text-light">INVESTMENT <br>PROJECTS</span> IN DUBAI</p>
+    </div>
+</nav>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark pb-3">
+    <div class="container-fluid">
+        <form id="searchForm" action="{% url 'projects' %}" method="get" class="d-flex mx-auto pt-3 w-50" role="search">
+            <div class="row">
+                <div class="col-12 pt-1 pb-1">
+                    <input type="search" class="form-control" placeholder="District or key word" aria-label="Search" name="keywords" value="{{keywords|default_if_none:''}}">
+                </div>
+
+                <div class="col-md-6 pt-1 pb-1">
+                    <input type="search" class="form-control" placeholder="Beds" aria-label="Beds" name="beds" value="{{beds|default_if_none:''}}">
+                </div>
+                <div class="col-md-6 pt-1 pb-1">
+                    <input type="search" class="form-control" placeholder="Baths" aria-label="Baths" name="baths" value="{{baths|default_if_none:''}}">
+                </div>
+
+                <div class="col-md-6 pt-1 pb-1">
+                    <label for="min-price" class="form-label text-white">Set minimum price (AED):</label>
+                    <input type="search" class="form-control" placeholder="Price from... AED" aria-label="Price from" name="min_price" value="{{min_price|default_if_none:''}}">
+                </div>
+                <div class="col-md-6 pt-1 pb-1">
+                    <label for="max-price" class="form-label text-white">Set maximum price (AED):</label>
+                    <input type="search" class="form-control" placeholder="Price to... AED" aria-label="Price to" name="max_price" value="{{max_price|default_if_none:''}}">
+                </div>
+
+                <div class="col-md-6 pt-1 pb-1">
+                    <select class="form-select bg-info" id="selectOption">
+                        <option value="" disabled selected hidden>Select valuation</option>
+                        {% for val in val_options %}
+                        <option name="{{val}}" value="{{val}}">
+                            {{val|capfirst}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- <div class="col pt-1 pb-1 ml-auto d-flex justify-content-start">
+                    <a href="#" class="btn btn-primary">Show selection</a>
+                </div> -->
+            
+                <div class="col pt-1 pb-1 ml-auto d-flex justify-content-end">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</nav>

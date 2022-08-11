@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% load static %}
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+        <title>Log In / Sign Up</title>
+    </head>
+
+    <body class="bg-secondary bg-gradient pt-5 pb-5 min-vh-100">
+        <div class="container-fluid mx-auto w-75">        
+            {% include 'messages.html' %}
+
+            {% if page == 'register' %}
+            <div class="card p-5">
+                <h1>Please register:</h1>
+
+                <form method="POST" action="{% url 'register' %}" class="w-75 pt-3 pb-3">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                {% for field in form %}
+                    {% if field.help_text %}
+                        <small>{{ field.help_text }}</small>
+                    {% endif %}
+                {% endfor %}
+
+                {% buttons %}
+                    <button type="submit" class="btn btn-primary">SUBMIT</button>
+                    <a href="{% url 'projects' %}" class="btn btn-secondary">CANCEL</a>
+                {% endbuttons %}
+                </form>
+
+                <p class="mt-5">Already have an account? <a href="{% url 'login' %}">Sign Up</a></p>
+            </div>
+
+            {% else %}
+            <div class="card p-5">
+                <h1>Please log in:</h1>
+
+                <form method="POST" action="{% url 'login' %}" class="w-75 pt-3 pb-3">
+                    {% csrf_token %}
+                    <input type="text" name="username" autocomplete="on" placeholder="Enter name" class="form-control mb-3" />
+                    <input type="password" name="password" autocomplete="on" placeholder="Enter password" class="form-control mb-3" />
+                    <button type="submit" class="btn btn-primary">LOG IN</button>
+                    <a href="{% url 'reset_password' %}">Forgotten your password?</a>
+
+                    <p class="mt-5">Don't have an account? <a href="{% url 'register' %}">Sign Up</a></p>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    </body>
+</html>

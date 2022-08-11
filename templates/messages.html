@@ -1,0 +1,8 @@
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{ message.tags }} d-flex justify-content-between align-items-center" role="alert">
+    <span>{{ message }}</span>
+    <button type="button" class="alert-close btn-close ml-3" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}

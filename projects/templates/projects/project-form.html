@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+
+{% block content %}
+
+<h1 class="mt-5">Create or Modify Project</h1>
+
+<form class="w-50 pt-3 pb-3 mb-5" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">SUBMIT</button>
+        <a href="{% url 'projects' %}" class="btn btn-secondary">CANCEL</a>
+    {% endbuttons %}
+</form>
+
+{% endblock content %}

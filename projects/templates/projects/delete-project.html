@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+
+{% block content %}
+<form class="p-3" action="" method="POST">
+    {% csrf_token %}
+
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+
+    {% buttons %}
+        <button type="submit" class="btn btn-primary">CONFIRM</button>
+        <a href="{% url 'project' object.listing_id %}" class="btn btn-secondary">GO BACK</a>
+    {% endbuttons %}
+</form>
+{% endblock content %}

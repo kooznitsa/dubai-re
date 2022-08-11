@@ -1,0 +1,7 @@
+__pycache__
+staticfiles/
+venv/
+
+/confidential.py
+/db_info.py
+*.sqlite*
