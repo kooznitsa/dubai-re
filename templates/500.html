@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+        <title>Error 500: Server Error</title>
+    </head>
+
+    <body class="d-flex flex-column min-vh-100">
+        <section class="container-fluid mx-auto w-75 p-3 mb-5">
+            <h2 class="mt-5 pb-3">Error 500: Server Error</h2>
+            <a href="{% url 'projects' %}" class="btn btn-primary">Home</a>
+        </section>
+    </body>
+</html>

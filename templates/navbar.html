@@ -39,36 +39,32 @@
                 </div>
 
                 <div class="col-md-6 pt-1 pb-1">
-                    <input type="search" class="form-control" placeholder="Beds" aria-label="Beds" name="beds" value="{{beds|default_if_none:''}}">
+                    <input type="number" class="form-control" placeholder="Beds" aria-label="Beds" name="beds" value="{{beds|default_if_none:''}}">
                 </div>
                 <div class="col-md-6 pt-1 pb-1">
-                    <input type="search" class="form-control" placeholder="Baths" aria-label="Baths" name="baths" value="{{baths|default_if_none:''}}">
+                    <input type="number" class="form-control" placeholder="Baths" aria-label="Baths" name="baths" value="{{baths|default_if_none:''}}">
                 </div>
 
                 <div class="col-md-6 pt-1 pb-1">
                     <label for="min-price" class="form-label text-white">Set minimum price (AED):</label>
-                    <input type="search" class="form-control" placeholder="Price from... AED" aria-label="Price from" name="min_price" value="{{min_price|default_if_none:''}}">
+                    <input type="number" class="form-control" placeholder="Price from... AED" aria-label="Price from" name="min_price" value="{{min_price|default_if_none:''}}">
                 </div>
                 <div class="col-md-6 pt-1 pb-1">
                     <label for="max-price" class="form-label text-white">Set maximum price (AED):</label>
-                    <input type="search" class="form-control" placeholder="Price to... AED" aria-label="Price to" name="max_price" value="{{max_price|default_if_none:''}}">
+                    <input type="number" class="form-control" placeholder="Price to... AED" aria-label="Price to" name="max_price" value="{{max_price|default_if_none:''}}">
                 </div>
 
                 <div class="col-md-6 pt-1 pb-1">
-                    <select class="form-select bg-info" id="selectOption">
-                        <option value="" disabled selected hidden>Select valuation</option>
+                    <select class="form-select bg-info" id="selectOption" name="valuation">
+                        <option value="" disabled {% if not request.GET.valuation %}selected{% endif %} hidden>Select valuation</option>
                         {% for val in val_options %}
-                        <option name="{{val}}" value="{{val}}">
+                        <option value="{{val}}" {% if request.GET.valuation == val %}selected{% endif %}>
                             {{val|capfirst}}
                         </option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <!-- <div class="col pt-1 pb-1 ml-auto d-flex justify-content-start">
-                    <a href="#" class="btn btn-primary">Show selection</a>
-                </div> -->
-            
                 <div class="col pt-1 pb-1 ml-auto d-flex justify-content-end">
                     <button class="btn btn-primary" type="submit">Search</button>
                 </div>

@@ -39,11 +39,13 @@ let buildProjects = (projects) => {
 
         let projectCard = `
                 <div class="card mb-5">
-                    <img class="card-img-top" src="http://127.0.0.1:8000${project.featured_image}" />
-                    
                     <div class="card-body">
-                        <h3 class="card-title">${project.highlights}</h3>
-                        <p class="card-text">${project.amenities.substring(0, 150)}</p>
+                        <a href="http://127.0.0.1:8000/project/${project.id}" target="_blank">
+                            <h4 class="card-title">${project.highlights}</h4>
+                        <a/>
+                        <p class="card-text">PRICE: AED ${project.price}</p>
+                        <p class="card-text">SURFACE: ${project.surface} sqf</p>
+                        <p class="card-text">${project.amenities.substring(0, 300)}</p>
                     </div>
                 
                 </div>

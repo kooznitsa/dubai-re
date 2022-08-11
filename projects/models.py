@@ -62,5 +62,3 @@ class Project(models.Model):
     class Meta:
         managed = False
         db_table = 'ready_flats'
-
-

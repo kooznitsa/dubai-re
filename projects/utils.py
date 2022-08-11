@@ -75,7 +75,7 @@ def get_stats():
         val_options
 
 
-def empty_query(query):
+def invalid_query(query):
     if query in validators.EMPTY_VALUES:
         query = None
     elif query is not None and query.isnumeric():
@@ -88,11 +88,10 @@ def search_projects(request):
     baths = request.GET.get('baths', None)
     min_price = request.GET.get('min_price', None)
     max_price = request.GET.get('max_price', None)
-    valuation = request.GET.get('val', '')
-    print('VALUATION: ', valuation)
+    valuation = request.GET.get('valuation', '')
 
-    empty_query(beds)
-    empty_query(baths)
+    invalid_query(beds)
+    invalid_query(baths)
 
     minimum_price, maximum_price, overall_avg_price, overall_price_sqf, \
         most_common_districts, most_common_nhoods, n_undervalued, n_overvalued, \

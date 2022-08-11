@@ -15,7 +15,7 @@
         <div class="col-md-8">
             <div class="card-body">
                 <h5 class="card-title"><a class="link-dark" href="{% url 'project' project.id %}">{{ project.highlights }}</a></h5>
-                <p class="card-text"><span class="text-muted">{% if project.building != 'NaN' %} {{ project.building }} | {% endif %} {% if project.district != 'NaN' %} {{ project.district }} | {% endif %} {% if project.neighborhood != 'NaN' %} {{ project.neighborhood }} {% endif %}</sp></p>
+                <p class="card-text"><span class="text-muted">{% if project.building != 'NaN' %} {{ project.building }} {% endif %} |{% if project.district != 'NaN' %} {{ project.district }} | {% endif %} {% if project.neighborhood != 'NaN' %} {{ project.neighborhood }} {% endif %}</sp></p>
                 
                 {% if project.price %}
                 <p class="card-text"><strong>AED {{ project.price|intcomma }} {% if project.surface %} / {{ project.price|div:project.surface|floatformat:1 }} per sqf{% endif %}</strong></p>
