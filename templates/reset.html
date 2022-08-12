@@ -3,15 +3,16 @@
 {% bootstrap_css %}
 
 {% block content %}
-<h2 class="mt-5 pb-3">Enter new password</h2>
+<div class="container-fluid mx-auto w-75 p-3 mb-5">
+    <h2 class="mt-5 pb-3">Enter new password</h2>
 
-<p>Please enter your new password twice so we can verify you typed it in correctly.</p>
+    <p>Please enter your new password twice so we can verify you typed it in correctly.</p>
 
-<form class="w-50 pt-3 pb-3 mb-5" method="POST">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <button type="submit" class="btn btn-primary">SUBMIT</button>
-    <a href="{% url 'projects' %}" class="btn btn-secondary">CANCEL</a>
-</form>
-
+    <form class="w-50 pt-3 pb-3 mb-5" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">SUBMIT</button>
+        <a href="{% url 'projects' %}" class="btn btn-secondary">CANCEL</a>
+    </form>
+</div>
 {% endblock content %}

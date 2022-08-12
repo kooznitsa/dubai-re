@@ -3,14 +3,18 @@
 {% bootstrap_css %}
 
 {% block content %}
-<form class="p-3" action="" method="POST">
-    {% csrf_token %}
+{% include 'search-form.html' %}
 
-    <p>Are you sure you want to delete "{{ object }}"?</p>
+<div class="container-fluid mx-auto w-75 p-3 mb-5">
+    <form class="p-3" action="" method="POST">
+        {% csrf_token %}
 
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">CONFIRM</button>
-        <a href="{% url 'project' object.listing_id %}" class="btn btn-secondary">GO BACK</a>
-    {% endbuttons %}
-</form>
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">CONFIRM</button>
+            <a href="{% url 'project' object.id %}" class="btn btn-secondary">GO BACK</a>
+        {% endbuttons %}
+    </form>
+</div>
 {% endblock content %}

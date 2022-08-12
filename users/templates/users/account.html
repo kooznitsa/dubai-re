@@ -1,23 +1,25 @@
 {% extends 'main.html' %}
 
 {% block content %}
+{% include 'search-form.html' %}
 
-<h1 class="mt-5">User Profile: {{ profile.first_name }} {{ profile.last_name }}</h1>
+<div class="container-fluid mx-auto w-75 p-3 mb-5">
+    <h1 class="mt-5">User Profile: {{ profile.first_name }} {{ profile.last_name }}</h1>
 
-<div class="pt-3 pb-3">
-    <p><span class="text-uppercase fw-bold">NAME: </span>{{ profile.first_name }} {{ profile.last_name }}</p>
-    <p><span class="text-uppercase fw-bold">EMAIL: </span>{{ profile.email }}</p>
+    <div class="pt-3 pb-3">
+        <p><span class="text-uppercase fw-bold">NAME: </span>{{ profile.first_name }} {{ profile.last_name }}</p>
+        <p><span class="text-uppercase fw-bold">EMAIL: </span>{{ profile.email }}</p>
+    </div>
+
+    <a href="{% url 'add-project' %}" class="btn btn-primary">ADD PROJECTS</a>
+    <a href="{% url 'edit-account' %}" class="btn btn-secondary">EDIT PROFILE</a>
+
+    <h2 class="mt-5">Latest projects added by {{ profile.first_name }} {{ profile.last_name }}:</h2>
+
+    <div class="pt-3 pb-3">
+    {% for project in profile.project_set.all|slice:":3" %}
+        {% include 'project-card.html' %}
+    {% endfor %}
+    </div>
 </div>
-
-<a href="{% url 'add-project' %}" class="btn btn-primary">ADD PROJECTS</a>
-<a href="{% url 'edit-account' %}" class="btn btn-secondary">EDIT PROFILE</a>
-
-<h2 class="mt-5">Latest projects added by {{ profile.first_name }} {{ profile.last_name }}:</h2>
-
-<div class="pt-3 pb-3">
-{% for project in profile.project_set.all|slice:":3" %}
-    {% include 'project-card.html' %}
-{% endfor %}
-</div>
-
 {% endblock content %}
