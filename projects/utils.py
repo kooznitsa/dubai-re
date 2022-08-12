@@ -51,31 +51,20 @@ def get_stats():
         .order_by('-count')[:3]
     most_common_nhoods = ', '.join([nhood['neighborhood'] for nhood in common_nhoods_list])
 
-    undervalued = Project.objects \
-        .filter(valuation__in=('good value', 'great value')) \
-        .values('valuation') \
-        .annotate(count=Count('valuation'))
-    n_undervalued = sum(n['count'] for n in undervalued)
-
-    overvalued = Project.objects \
-        .filter(valuation__in=('overvalued', 'highly overvalued')) \
-        .values('valuation') \
-        .annotate(count=Count('valuation'))
-    n_overvalued = sum(n['count'] for n in overvalued)
-
-    val_queryset = Project.objects \
-        .exclude(valuation=None) \
-        .values('valuation') \
-        .annotate(count=Count('valuation')) \
-        .order_by('-count')
-    val_options = [valuation['valuation'] for valuation in val_queryset]
+    val_options = ['great value', 'good value', 'fair value', 'overvalued', 'highly overvalued']
+    n_undervalued, n_overvalued = 0, 0
+    for project in Project.objects.all():
+        if project.valuation == 'great value' or project.valuation == 'good value':
+            n_undervalued += 1
+        elif project.valuation == 'overvalued' or project.valuation == 'highly overvalued':
+            n_overvalued += 1
 
     return minimum_price, maximum_price, overall_avg_price, overall_price_sqf, \
         most_common_districts, most_common_nhoods, n_undervalued, n_overvalued, \
         val_options
 
 
-def invalid_query(query):
+def empty_query(query):
     if query in validators.EMPTY_VALUES:
         query = None
     elif query is not None and query.isnumeric():
@@ -90,8 +79,8 @@ def search_projects(request):
     max_price = request.GET.get('max_price', None)
     valuation = request.GET.get('valuation', '')
 
-    invalid_query(beds)
-    invalid_query(baths)
+    empty_query(beds)
+    empty_query(baths)
 
     minimum_price, maximum_price, overall_avg_price, overall_price_sqf, \
         most_common_districts, most_common_nhoods, n_undervalued, n_overvalued, \
@@ -114,49 +103,8 @@ def search_projects(request):
     projects = projects.distinct().filter(baths__exact=baths) if baths else projects
     projects = projects.distinct().filter(Q(price__gte=min_price, price__lte=max_price) | \
         Q(price__isnull=True)).order_by('price') if min_price or max_price else projects
-    projects = projects.distinct().filter(valuation__exact=valuation) if valuation else projects
+
+    objects_ids = [project.id for project in projects if ((project.valuation)==valuation)]
+    projects = projects.distinct().filter(id__in=objects_ids) if valuation else projects
 
     return projects, keywords, beds, baths, min_price, max_price, valuation
-
-
-def val_conditions(price_diff):
-    if (price_diff <= -50):
-        return 'great value'
-    elif (price_diff > -50) & (price_diff <= -30):
-        return 'good value'
-    elif (price_diff > -30) & (price_diff <= 30):
-        return 'fair value'
-    elif (price_diff > 30) & (price_diff <= 50):
-        return 'overvalued'
-    elif (price_diff > 50):
-        return 'highly overvalued'
-
-def valuate_projects(project):
-    price_diff, val_price = ['']*2
-
-    prices_avg_sqf = Project.objects.values('district', 'beds', 'baths') \
-        .distinct() \
-        .annotate(avg_sqf=Avg(ExpressionWrapper(F('price')/F('surface'), output_field=FloatField()))) \
-        .order_by()
-
-    prices_avg = Project.objects.values('district', 'beds', 'baths') \
-        .distinct() \
-        .annotate(avg=Avg(ExpressionWrapper(F('price'), output_field=FloatField()))) \
-        .order_by()
-
-    def average_price(price_list, new_var):
-        for i in price_list:
-            if project.district == i['district'] and \
-                project.beds == i['beds'] and \
-                project.baths == i['baths']:
-                    return i[new_var]
-
-    avg_price_sqf = average_price(prices_avg_sqf, 'avg_sqf')
-    avg_price = average_price(prices_avg, 'avg')
-
-    if project.price and project.surface:
-        sqf_price = project.price / project.surface
-        price_diff = sqf_price / avg_price_sqf * 100 - 100
-        val_price = val_conditions(price_diff)
-
-    return price_diff, val_price, avg_price_sqf, avg_price

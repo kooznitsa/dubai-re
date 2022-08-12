@@ -9,7 +9,10 @@
                 </a>
             </li>
             <li class="nav-item pt-2 px-3">
-                <a class="nav-link text-light" href="{% url 'projects' %}">Projects</a>
+                <a class="nav-link text-light" href="{% url 'projects' %}">All Projects</a>
+            </li>
+            <li class="nav-item pt-2 px-3">
+                <a class="nav-link text-light" href="{% url 'renovation-projects' %}">Renovation Projects</a>
             </li>
 
             {% if request.user.is_authenticated %}

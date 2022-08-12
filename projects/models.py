@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Avg, ExpressionWrapper, F, FloatField
 from django.utils.timezone import now
 import uuid
 
@@ -21,6 +22,9 @@ class Project(models.Model):
     highlights = models.TextField(max_length=100, blank=True, null=True)
     furnishing = models.CharField(max_length=255, blank=True, null=True)
     amenities = models.TextField(blank=True, null=True)
+    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
+    featured_image = models.ImageField(null=True, blank=True, default='')
+    created = models.DateTimeField(default=now, editable=False)
     completion_year = models.CharField(max_length=4, blank=True, null=True)
     floor = models.CharField(max_length=3, blank=True, null=True)
     views = models.IntegerField(blank=True, null=True, default=0)
@@ -35,14 +39,6 @@ class Project(models.Model):
     condition = models.IntegerField(blank=True, null=True, default=0)
     upgraded = models.CharField(max_length=255, blank=True, null=True)
     luxury = models.IntegerField(blank=True, null=True, default=0)
-    price_sqf = models.FloatField(blank=True, null=True)
-    median_sqf = models.FloatField(blank=True, null=True)
-    diff_percent = models.FloatField(blank=True, null=True)
-    valuation = models.CharField(max_length=255, blank=True, null=True)
-
-    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
-    featured_image = models.ImageField(null=True, blank=True, default='')
-    created = models.DateTimeField(default=now, editable=False)
 
     @property
     def tags(self):
@@ -55,10 +51,79 @@ class Project(models.Model):
 
         return [key for key in tags_dict if (tags_dict[key] == 1)]
 
+    @property
+    def sqf_price(self):
+        return self.price / self.surface
+
+    @property
+    def avg_price_sqf(self):
+        if self.price and self.surface:
+            return agg_price(self, prices_avg_sqf, 'avg_sqf')
+        else:
+            return ''
+
+    @property
+    def avg_price(self):
+        if self.price and self.surface:
+            return agg_price(self, prices_avg, 'avg')
+        else:
+            return ''
+
+    @property
+    def price_diff(self):
+        if self.price and self.surface:
+            return self.sqf_price / self.avg_price_sqf * 100 - 100
+        else:
+            return ''
+
+    @property
+    def valuation(self):
+        if self.price and self.surface:
+            return val_conditions(self.price_diff)
+        else:
+            return ''
 
     def __str__(self):
         return self.highlights
 
     class Meta:
         managed = False
-        db_table = 'ready_flats'
+        db_table = 'dubai_flats'
+
+
+
+def val_conditions(price_diff):
+    if (price_diff <= -50):
+        return 'great value'
+    elif (price_diff > -50) & (price_diff <= -30):
+        return 'good value'
+    elif (price_diff > -30) & (price_diff <= 30):
+        return 'fair value'
+    elif (price_diff > 30) & (price_diff <= 50):
+        return 'overvalued'
+    elif (price_diff > 50):
+        return 'highly overvalued'
+
+
+def overall_average():
+    prices_avg_sqf = Project.objects.values('district', 'beds', 'baths') \
+        .distinct() \
+        .annotate(avg_sqf=Avg(ExpressionWrapper(F('price')/F('surface'), output_field=FloatField()))) \
+        .order_by()
+
+    prices_avg = Project.objects.values('district', 'beds', 'baths') \
+        .distinct() \
+        .annotate(avg=Avg(ExpressionWrapper(F('price'), output_field=FloatField()))) \
+        .order_by()
+
+    return prices_avg_sqf, prices_avg
+
+prices_avg_sqf, prices_avg = overall_average()
+
+
+def agg_price(project, price_list, new_var):
+    for i in price_list:
+        if project.district == i['district'] and \
+            project.beds == i['beds'] and \
+            project.baths == i['baths']:
+                return i[new_var]

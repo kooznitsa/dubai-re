@@ -2,7 +2,7 @@ __pycache__
 staticfiles/
 venv/
 
-confidential.py
+dubai_re/confidential.py
 db_info.py
 .git
 *.sqlite*

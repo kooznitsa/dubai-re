@@ -29,7 +29,7 @@
 
                 <p><span class="text-uppercase fw-bold">BEDS, BATHS:</span> {% if project.beds %}{{ project.beds|floatformat }} bed{{ project.beds|pluralize:'s'}},{% endif %} {% if project.beds %}{{ project.baths }} bath{{ project.baths|pluralize:'s'}}{% endif %}</p>
                 {% if project.price %}
-                <p><span class="text-uppercase fw-bold">PRICE:</span> AED {{ project.price|intcomma }} {% if project.surface %}/ {{ project.price|div:project.surface|floatformat:1 }}{% endif %} per sqf {% if val_price %}[<span class="text-primary {% if val_price == 'good value' or val_price == 'great value' %} text-success {% elif val_price == 'overvalued' or val_price == 'highly overvalued' %} text-danger {% endif %}"><span class="text-uppercase fw-bold">{{ val_price }}</span></span>]{% endif %}</p>
+                <p><span class="text-uppercase fw-bold">PRICE:</span> AED {{ project.price|intcomma }} {% if project.surface %}/ {{ project.price|div:project.surface|floatformat:1 }}{% endif %} per sqf {% if project.valuation %}[<span class="text-primary {% if project.valuation == 'good value' or project.valuation == 'great value' %} text-success {% elif project.valuation == 'overvalued' or project.valuation == 'highly overvalued' %} text-danger {% endif %}"><span class="text-uppercase fw-bold">{{ project.valuation }}</span></span>]{% endif %}</p>
                 {% endif %}
                 {% if project.surface %}
                 <p><span class="text-uppercase fw-bold">SURFACE:</span> {{ project.surface|floatformat:1 }} sqf</p>

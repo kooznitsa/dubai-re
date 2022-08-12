@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from .models import Project
 from .forms import ProjectForm
-from .utils import get_stats, paginate_projects, search_projects, valuate_projects
+from .utils import get_stats, paginate_projects, search_projects
 
 
 minimum_price, maximum_price, overall_avg_price, overall_price_sqf, \
@@ -26,12 +26,29 @@ def projects(request):
     return render(request, 'projects/projects.html', context)
 
 
+def renovation_projects(request):
+    projects = Project.objects.all()
+    projects_ids = [project.id for project in projects if
+        ((project.valuation) == 'good value' or (project.valuation) == 'great value') and
+        ((project.discounted == 1) or
+        (project.cheap == 1) or
+        (project.distressed == 1) or
+        (project.condition == '') or
+        (int(project.completion_year.strip() or 0) < 2017 and 
+        int(project.completion_year.strip() or 0) != 0))]
+    renovation_projects = projects.distinct().filter(id__in=projects_ids).order_by('-created')
+
+    projects_per_page = 25
+    custom_range, renovation_projects = paginate_projects(request, renovation_projects, projects_per_page)
+
+    context = {'renovation_projects': renovation_projects, 'custom_range': custom_range, 
+        'project_length': len(projects_ids)}
+    return render(request, 'projects/renovation-projects.html', context)
+
+
 def project(request, pk):
     project = Project.objects.get(id=pk)
-    price_diff, val_price, avg_price_sqf, avg_price = valuate_projects(project)
-
-    context = {'project': project, 'val_price': val_price, 'val_options': val_options,
-        'price_diff': price_diff, 'avg_price': avg_price, 'avg_price_sqf': avg_price_sqf}
+    context = {'project': project, 'val_options': val_options}
 
     return render(request, 'projects/single-project.html', context)
 

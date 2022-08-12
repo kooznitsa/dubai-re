@@ -3,8 +3,10 @@
 import pandas as pd
 from ast import literal_eval
 import re
+import uuid
 
-df = pd.read_csv('../../data/bayut/ready_flats.csv', converters={'amenities': literal_eval})
+
+df = pd.read_csv('data/bayut/ready_flats.csv', converters={'amenities': literal_eval})
 
 views = ['view', 'views', 'seaview', 'overlooking', 'facing']
 luxury = ['luxury', 'luxurious', 'luxuriously', 'premium']
@@ -101,6 +103,9 @@ def get_luxury(df):
 
 def clean_data(df):
     df = df.drop_duplicates(subset='listing_id', keep='first')
+    df['id'] = [uuid.uuid4() for _ in range(len(df.index))]
+    df['owner_id'] = 1
+    df['featured_image'] = ''
     df['baths'] = df['baths'].apply(lambda x: x.replace('[','').replace(']','').replace("'",''))
     df['highlights'] = df['highlights'].apply(lambda x: x.replace('|',',').replace(' ,',','))
     df[['baths', 'beds']] = df[['baths', 'beds']].apply(pd.to_numeric, errors='coerce')
@@ -111,8 +116,9 @@ def clean_data(df):
     global df_ready
     df_ready = df[(df['completion'] == 'Ready')]
 
-    df_ready = df_ready[['listing_id', 'URL', 'building', 'district', 'neighborhood', 'price', 'beds', 'baths', \
-            'surface', 'lat', 'long', 'highlights', 'furnishing', 'amenities']]
+    df_ready = df_ready[['id', 'listing_id', 'URL', 'building', 'district', 'neighborhood', \
+        'price', 'beds', 'baths', 'surface', 'lat', 'long', 'highlights', 'furnishing', 'amenities', \
+        'owner_id', 'featured_image', 'created']]
     df_ready = df_ready[~df_ready.index.duplicated(keep='first')]    
 
     get_years(df_ready)
@@ -135,36 +141,7 @@ def clean_data(df):
     return df_ready
 
 
-def get_valuation(df_ready):
-    df_ready['price_sqf'] = df_ready['price'] / df_ready['surface']
-
-    df2 = (df_ready.groupby(['district','beds','baths'])['price_sqf']
-            .agg([('median_sqf','median')])
-            .reset_index())
-
-    df_ready = df_ready.merge(df2, on=['district', 'beds', 'baths'], how='left')
-
-    diff_percent = ((df_ready['price_sqf'] / df_ready['median_sqf']) * 100) - 100
-    df_ready['diff_percent'] = diff_percent
-
-    def val_conditions(row):
-        if (row['diff_percent'] <= -50):
-            return 'great value'
-        elif (row['diff_percent'] > -50) & (row['diff_percent'] <= -30):
-            return 'good value'
-        elif (row['diff_percent'] > -30) & (row['diff_percent'] <= 30):
-            return 'fair value'
-        elif (row['diff_percent'] > 30) & (row['diff_percent'] <= 50):
-            return 'overvalued'
-        elif (row['diff_percent'] > 50):
-            return 'highly overvalued' 
-
-    df_ready['valuation'] = df_ready.apply(lambda row: val_conditions(row), axis=1)
-    return df_ready
-
-
 def create_new_df():
     df_ready = clean_data(df)
-    df_ready = get_valuation(df_ready)
     print(df_ready.info())
     return df_ready
