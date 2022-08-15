@@ -11,15 +11,15 @@ df = pd.read_csv('data/bayut/ready_flats.csv', converters={'amenities': literal_
 views = ['view', 'views', 'seaview', 'overlooking', 'facing']
 luxury = ['luxury', 'luxurious', 'luxuriously', 'premium']
 discounted = ['reduced price', 'priced reduced', 'price reduction', 'discounted price', 'negotiable', \
-            'price drop', 'price dropped']
+        'price drop', 'price dropped']
 cheap = ['affordable', 'cheap', 'cheapest', 'well-priced', 'well priced', 'economical', 'best price']
 distressed = ['distress', 'distressed']
 upgraded = ['upgraded', 'partially upgraded', 'fully upgraded', 'semi-upgraded', 'semi upgraded', 'renovated']
 condition = ['superb condition', 'brand new', 'new building', 'high quality',\
-    'well maintained', 'well-maintained', 'high-end finishing', 'excellent condition', 'great condition',\
-    'pristine condition', 'immaculate condition','amazing condition', 'mint condition', 'bes condition', \
-    'best condition', 'good condition', 'new condition', 'perfect condition', 'tip-top condition', \
-    'turnkey condition', 'top condition', 'impeccable condition','mint condiition']
+        'well maintained', 'well-maintained', 'high-end finishing', 'excellent condition', 'great condition',\
+        'pristine condition', 'immaculate condition','amazing condition', 'mint condition', 'bes condition', \
+        'best condition', 'good condition', 'new condition', 'perfect condition', 'tip-top condition', \
+        'turnkey condition', 'top condition', 'impeccable condition','mint condiition']
 investment = ['investment', 'investor deal', 'investors deal', 'roi', 'investor visa', 'high returns']
 tenanted = ['tenanted', 'rented', 'tenant']
 vacant = ['vacant']
@@ -117,8 +117,8 @@ def clean_data(df):
     df_ready = df[(df['completion'] == 'Ready')]
 
     df_ready = df_ready[['id', 'listing_id', 'URL', 'building', 'district', 'neighborhood', \
-        'price', 'beds', 'baths', 'surface', 'lat', 'long', 'highlights', 'furnishing', 'amenities', \
-        'owner_id', 'featured_image', 'created']]
+            'price', 'beds', 'baths', 'surface', 'lat', 'long', 'highlights', 'furnishing', \
+            'amenities', 'owner_id', 'featured_image', 'created']]
     df_ready = df_ready[~df_ready.index.duplicated(keep='first')]    
 
     get_years(df_ready)

@@ -1,8 +1,9 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Avg, ExpressionWrapper, F, FloatField
 from django.utils.timezone import now
-import uuid
 
 
 class Project(models.Model):
@@ -43,10 +44,10 @@ class Project(models.Model):
     @property
     def tags(self):
         tags_keys = ['views', 'discounted', 'cheap', 'distressed', 'investment', \
-        'tenanted', 'vacant', 'metro', 'furnished', 'condition', 'luxury']
+                'tenanted', 'vacant', 'metro', 'furnished', 'condition', 'luxury']
         tags_values = [self.views, self.discounted, \
-            self.cheap, self.distressed, self.investment, self.tenanted, \
-            self.vacant, self.metro, self.furnished, self.condition, self.luxury]
+                self.cheap, self.distressed, self.investment, self.tenanted, \
+                self.vacant, self.metro, self.furnished, self.condition, self.luxury]
         tags_dict = dict(zip(tags_keys, tags_values))
 
         return [key for key in tags_dict if (tags_dict[key] == 1)]

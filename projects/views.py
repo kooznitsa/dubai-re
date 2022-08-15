@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
-from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+
 from .models import Project
 from .forms import ProjectForm
 from .utils import get_stats, paginate_projects, search_projects
 
 
 minimum_price, maximum_price, overall_avg_price, overall_price_sqf, \
-    most_common_districts, most_common_nhoods, n_undervalued, n_overvalued, \
-    val_options = get_stats()
+        most_common_districts, most_common_nhoods, n_undervalued, n_overvalued, \
+        val_options = get_stats()
 
 
 def projects(request):
@@ -17,11 +17,11 @@ def projects(request):
     custom_range, projects = paginate_projects(request, projects, projects_per_page)
 
     context = {'projects': projects, 'keywords': keywords, 'beds': beds, 'baths': baths,
-    'min_price': min_price, 'max_price': max_price, 'val_options': val_options, 
-    'valuation': valuation, 'custom_range': custom_range, 'overall_avg_price': overall_avg_price, 
-    'overall_price_sqf': overall_price_sqf, 'most_common_districts': most_common_districts, 
-    'most_common_nhoods': most_common_nhoods, 'n_undervalued': n_undervalued, 
-    'n_overvalued': n_overvalued}
+            'min_price': min_price, 'max_price': max_price, 'val_options': val_options, 
+            'valuation': valuation, 'custom_range': custom_range, 'overall_avg_price': overall_avg_price, 
+            'overall_price_sqf': overall_price_sqf, 'most_common_districts': most_common_districts, 
+            'most_common_nhoods': most_common_nhoods, 'n_undervalued': n_undervalued, 
+            'n_overvalued': n_overvalued}
 
     return render(request, 'projects/projects.html', context)
 

@@ -4,8 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import CustomUserCreationForm, ProfileForm
 from users.models import User
+
+from .forms import CustomUserCreationForm, ProfileForm
 
 
 def login_user(request):

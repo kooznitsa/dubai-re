@@ -1,13 +1,14 @@
 from django.forms import ModelForm
 from django import forms
+
 from .models import Project
 
 
 all_fields = ['highlights', 'building', 'district', 'neighborhood', \
-    'price', 'surface', 'beds', 'baths', 'amenities', 'url']
+        'price', 'surface', 'beds', 'baths', 'amenities', 'url']
 tag_fields = ['cheap', 'condition', 'discounted', 'distressed', \
-    'furnished', 'investment', 'luxury', 'metro', 'tenanted', \
-    'upgraded', 'vacant', 'views']
+        'furnished', 'investment', 'luxury', 'metro', 'tenanted', \
+        'upgraded', 'vacant', 'views']
 
 
 class ProjectForm(ModelForm):

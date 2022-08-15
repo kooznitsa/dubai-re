@@ -1,8 +1,9 @@
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Avg, Count, ExpressionWrapper, F, FloatField, Max, Min
-from .models import Project
 from django.core import validators
+
+from .models import Project
 
 
 def paginate_projects(request, projects, results):
@@ -37,7 +38,7 @@ def get_stats():
 
     overall_avg_price = Project.objects.aggregate(average_price=Avg('price'))['average_price']
     overall_price_sqf = Project.objects.aggregate(average_sqf=Avg(ExpressionWrapper(F('price')/F('surface'), \
-        output_field=FloatField())))['average_sqf']
+            output_field=FloatField())))['average_sqf']
     
     common_districts_list = Project.objects \
         .values('district') \
@@ -83,8 +84,8 @@ def search_projects(request):
     empty_query(baths)
 
     minimum_price, maximum_price, overall_avg_price, overall_price_sqf, \
-        most_common_districts, most_common_nhoods, n_undervalued, n_overvalued, \
-        val_options = get_stats()
+            most_common_districts, most_common_nhoods, n_undervalued, n_overvalued, \
+            val_options = get_stats()
 
     if min_price == None or min_price == '':
         min_price = minimum_price
